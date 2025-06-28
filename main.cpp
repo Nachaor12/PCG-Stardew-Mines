@@ -6,13 +6,14 @@
 #include <random>   // For random number generation
 #include <chrono>   // For seeding the random number generator
 
-
-using Map = std::vector<std::vector<int>>;
+const char pared = '#';
+const char piso = '0';
+using Map = std::vector<std::vector<char>>;
 
 void printMap(const Map& map) {
     std::cout << "--- Current Map ---" << std::endl;
     for (const auto& row : map) {
-        for (int cell : row) {
+        for (char cell : row) {
             
             std::cout << cell << " ";
         }
@@ -27,7 +28,7 @@ Map GenerarRuido(const Map& currentMap, int W, int H){
     Map noisyMap = currentMap;
      for (int y = 0; y < H; ++y) {
         for (int x = 0; x < W; ++x) {
-            noisyMap[x][y] = ((rand() % 30) < 2) ? 1 : 0;
+            noisyMap[x][y] = ((rand() % 30) < 2) ? pared : piso;
         }
     }
     return noisyMap;
@@ -50,17 +51,17 @@ Map cellularAutomata(const Map& currentMap, int W, int H, int R, double U) {
                 for (int radX = - R; radX <= R; radX++){
                     int nx = x + radX;
                     int ny = y + radY;
-
+                    
                      if (nx < 0 || nx >= W || ny < 0 || ny >= H) {//si sale del mapa, salta ese paso
             
                         count += 1;
-                    }else{
-                        count += newMap[nx][ny];
+                    }else if (newMap[nx][ny] == pared){
+                        count += 1;
                     }
                     
                 }
             }
-            noisyMap[x][y] = (count>= U) ? 1:0;//si en el punto especifico la cantidad de casillas que la rodea es mayor o igual a lo que pide u, entonces se convierte en parte del mapa
+            noisyMap[x][y] = (count>= U) ? pared:piso;//si en el punto especifico la cantidad de casillas que la rodea es mayor o igual a lo que pide u, entonces se convierte en parte del mapa
         }
     }
 
@@ -82,7 +83,7 @@ int main(){
 
 
 
-    Map myMap(mapCols, std::vector<int>(mapRows, 0));
+    Map myMap(mapCols, std::vector<char>(mapRows, 0));
 
 
 
