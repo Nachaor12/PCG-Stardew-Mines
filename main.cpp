@@ -21,7 +21,9 @@ void printMap(const Map& map) {
     std::cout << "-------------------" << std::endl;
 }
 
-
+//cellular automata con modificacion
+//a este se le agregan limites de las paredes, que el tamaño también varie a partir de un rango
+//Tambien se le agrega un modificador para que no queden espacios intransitables
 Map cellularAutomata(const Map& currentMap, int W, int H, int R, double U) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     srand(seed);
@@ -53,7 +55,7 @@ Map cellularAutomata(const Map& currentMap, int W, int H, int R, double U) {
                     
                 }
             }
-            noisyMap[x][y] = (count>= U) ? 0:1;
+            noisyMap[x][y] = (count>= U) ? 1:0;//si en el punto especifico la cantidad de casillas que la rodea es mayor o igual a lo que pide u, entonces se convierte en parte del mapa
         }
     }
 
